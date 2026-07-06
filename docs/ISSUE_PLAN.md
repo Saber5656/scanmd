@@ -3,7 +3,9 @@
 Status: Active
 Last updated: 2026-07-07
 Derived from: `docs/DESIGN.md` (normative). GitHub Issues are generated from
-`docs/issues/NN-*.md`; if they diverge, these files win.
+`docs/issues/NN-*.md`; if they diverge, these files win. GitHub numbering is
+offset by one from the file numbering (PR #1 took the first number): draft
+`NN` = GitHub issue `#(NN+1)`, i.e. #2–#29.
 
 ---
 
@@ -31,36 +33,36 @@ behavior lives only in prose outside this plan.
 
 ## 2. Issue list (recommended execution order)
 
-| # | File | Title | Wave |
-|---|---|---|---|
-| 01 | `issues/01-swiftpm-scaffold.md` | Scaffold SwiftPM package with ScanMDKit and scanmd targets | 0 |
-| 02 | `issues/02-community-files-license.md` | Add LICENSE (MIT, approval-gated) and community health files | 0 |
-| 03 | `issues/03-ci-build-test.md` | CI workflow: build, test, lint, no-network guard | 0 |
-| 04 | `issues/04-error-taxonomy-logging.md` | Error taxonomy, exit codes, and privacy-safe logging | 0 |
-| 05 | `issues/05-core-model-protocols.md` | Core data model, stage protocols, and pipeline orchestrator | 0 |
-| 06 | `issues/06-config-module.md` | Config schema v1: load, validate, defaults, init | 0 |
-| 07 | `issues/07-test-fixtures.md` | Test fixture corpus and golden-test harness | 0 |
-| 08 | `issues/08-vision-recognizer.md` | VisionTextRecognizer (Vision OCR wrapper) | 1 |
-| 09 | `issues/09-layout-reconstruction.md` | Layout reconstruction: lines → blocks heuristics | 1 |
-| 10 | `issues/10-markdown-renderer.md` | Markdown renderer and front matter builder | 1 |
-| 11 | `issues/11-output-sinks.md` | Output sinks: stdout, clipboard, file (templates) | 1 |
-| 12 | `issues/12-source-image-file.md` | ImageFileSource: image files and stdin | 2 |
-| 13 | `issues/13-source-clipboard.md` | ClipboardSource: pasteboard image and file URLs | 2 |
-| 14 | `issues/14-source-pdf.md` | PDFSource: text layer extraction with OCR fallback | 2 |
-| 15 | `issues/15-source-screen-region.md` | ScreenRegionSource: interactive capture via screencapture | 2 |
-| 16 | `issues/16-source-camera.md` | CameraSource: AVFoundation still capture (CLI path) | 2 |
-| 17 | `issues/17-cli-skeleton.md` | CLI skeleton: root command, global flags, config & image commands | 3 |
-| 18 | `issues/18-cli-subcommands-e2e.md` | CLI: remaining subcommands, JSON format, e2e test suite | 3 |
-| 19 | `issues/19-app-scaffold-xcodegen.md` | App scaffold: XcodeGen project, MenuBarExtra shell | 4 |
-| 20 | `issues/20-app-capture-actions.md` | App capture actions and state machine | 4 |
-| 21 | `issues/21-app-camera-window.md` | App camera preview window | 4 |
-| 22 | `issues/22-app-hotkey-settings.md` | Global hotkey, Settings window, launch at login | 4 |
-| 23 | `issues/23-app-result-delivery.md` | App result delivery: clipboard, notifications, auto-save | 4 |
-| 24 | `issues/24-repo-hardening-config.md` | Repository hardening: Dependabot, CodeQL, action pinning | 5 |
-| 25 | `issues/25-threat-model-doc.md` | SECURITY-MODEL.md: full threat model mapped to code | 5 |
-| 26 | `issues/26-release-pipeline.md` | Release pipeline: universal builds, checksums, signing gate | 5 |
-| 27 | `issues/27-homebrew-packaging.md` | Homebrew formula and tap publication runbook | 5 |
-| 28 | `issues/28-docs-readme-v1.md` | v1 documentation: README, permissions guide, CHANGELOG | 5 |
+| # | File | Title | Wave | GitHub |
+|---|---|---|---|---|
+| 01 | `issues/01-swiftpm-scaffold.md` | Scaffold SwiftPM package with ScanMDKit and scanmd targets | 0 | [#2](https://github.com/Saber5656/scanmd/issues/2) |
+| 02 | `issues/02-community-files-license.md` | Add LICENSE (MIT, approval-gated) and community health files | 0 | [#3](https://github.com/Saber5656/scanmd/issues/3) |
+| 03 | `issues/03-ci-build-test.md` | CI workflow: build, test, lint, no-network guard | 0 | [#4](https://github.com/Saber5656/scanmd/issues/4) |
+| 04 | `issues/04-error-taxonomy-logging.md` | Error taxonomy, exit codes, and privacy-safe logging | 0 | [#5](https://github.com/Saber5656/scanmd/issues/5) |
+| 05 | `issues/05-core-model-protocols.md` | Core data model, stage protocols, and pipeline orchestrator | 0 | [#6](https://github.com/Saber5656/scanmd/issues/6) |
+| 06 | `issues/06-config-module.md` | Config schema v1: load, validate, defaults, init | 0 | [#7](https://github.com/Saber5656/scanmd/issues/7) |
+| 07 | `issues/07-test-fixtures.md` | Test fixture corpus and golden-test harness | 0 | [#8](https://github.com/Saber5656/scanmd/issues/8) |
+| 08 | `issues/08-vision-recognizer.md` | VisionTextRecognizer (Vision OCR wrapper) | 1 | [#9](https://github.com/Saber5656/scanmd/issues/9) |
+| 09 | `issues/09-layout-reconstruction.md` | Layout reconstruction: lines → blocks heuristics | 1 | [#10](https://github.com/Saber5656/scanmd/issues/10) |
+| 10 | `issues/10-markdown-renderer.md` | Markdown renderer and front matter builder | 1 | [#11](https://github.com/Saber5656/scanmd/issues/11) |
+| 11 | `issues/11-output-sinks.md` | Output sinks: stdout, clipboard, file (templates) | 1 | [#12](https://github.com/Saber5656/scanmd/issues/12) |
+| 12 | `issues/12-source-image-file.md` | ImageFileSource: image files and stdin | 2 | [#13](https://github.com/Saber5656/scanmd/issues/13) |
+| 13 | `issues/13-source-clipboard.md` | ClipboardSource: pasteboard image and file URLs | 2 | [#14](https://github.com/Saber5656/scanmd/issues/14) |
+| 14 | `issues/14-source-pdf.md` | PDFSource: text layer extraction with OCR fallback | 2 | [#15](https://github.com/Saber5656/scanmd/issues/15) |
+| 15 | `issues/15-source-screen-region.md` | ScreenRegionSource: interactive capture via screencapture | 2 | [#16](https://github.com/Saber5656/scanmd/issues/16) |
+| 16 | `issues/16-source-camera.md` | CameraSource: AVFoundation still capture (CLI path) | 2 | [#17](https://github.com/Saber5656/scanmd/issues/17) |
+| 17 | `issues/17-cli-skeleton.md` | CLI skeleton: root command, global flags, config & image commands | 3 | [#18](https://github.com/Saber5656/scanmd/issues/18) |
+| 18 | `issues/18-cli-subcommands-e2e.md` | CLI: remaining subcommands, JSON format, e2e test suite | 3 | [#19](https://github.com/Saber5656/scanmd/issues/19) |
+| 19 | `issues/19-app-scaffold-xcodegen.md` | App scaffold: XcodeGen project, MenuBarExtra shell | 4 | [#20](https://github.com/Saber5656/scanmd/issues/20) |
+| 20 | `issues/20-app-capture-actions.md` | App capture actions and state machine | 4 | [#21](https://github.com/Saber5656/scanmd/issues/21) |
+| 21 | `issues/21-app-camera-window.md` | App camera preview window | 4 | [#22](https://github.com/Saber5656/scanmd/issues/22) |
+| 22 | `issues/22-app-hotkey-settings.md` | Global hotkey, Settings window, launch at login | 4 | [#23](https://github.com/Saber5656/scanmd/issues/23) |
+| 23 | `issues/23-app-result-delivery.md` | App result delivery: clipboard, notifications, auto-save | 4 | [#24](https://github.com/Saber5656/scanmd/issues/24) |
+| 24 | `issues/24-repo-hardening-config.md` | Repository hardening: Dependabot, CodeQL, action pinning | 5 | [#25](https://github.com/Saber5656/scanmd/issues/25) |
+| 25 | `issues/25-threat-model-doc.md` | SECURITY-MODEL.md: full threat model mapped to code | 5 | [#26](https://github.com/Saber5656/scanmd/issues/26) |
+| 26 | `issues/26-release-pipeline.md` | Release pipeline: universal builds, checksums, signing gate | 5 | [#27](https://github.com/Saber5656/scanmd/issues/27) |
+| 27 | `issues/27-homebrew-packaging.md` | Homebrew formula and tap publication runbook | 5 | [#28](https://github.com/Saber5656/scanmd/issues/28) |
+| 28 | `issues/28-docs-readme-v1.md` | v1 documentation: README, permissions guide, CHANGELOG | 5 | [#29](https://github.com/Saber5656/scanmd/issues/29) |
 
 ## 3. Dependency table
 
