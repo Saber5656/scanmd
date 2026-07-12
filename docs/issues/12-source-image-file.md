@@ -41,7 +41,7 @@ ClipboardSource file URLs (Issue 13) and the loader for ScreenRegionSource temp 
 4. Stdin variant: `Data` already in memory; enforce `maxFileSizeMB` against `data.count`
    and the same dimension gate. (Reading stdin happens in the CLI, Issue 17 — this type
    just accepts `Data` so it stays testable.)
-5. `acquire()` returns exactly one `PagePayload.image`.
+5. `acquire()` returns a `SourceAcquisition` with exactly one `PagePayload.image`.
 6. `SourceMetadata.originPath` = absolute path (nil for stdin); `pageCount = 1`.
 7. Tests: every supported format fixture decodes · orientation: generate a rotated
    TIFF fixture with EXIF orientation 6 and assert the decoded image is upright

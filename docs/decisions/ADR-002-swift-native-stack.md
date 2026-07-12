@@ -1,7 +1,7 @@
 # ADR-002: Swift-native stack (Vision OCR, SwiftPM, macOS 14+, universal binary)
 
 - Status: Accepted
-- Date: 2026-07-07
+- Date: 2026-07-12
 - Decider: repository owner (explicit answer to design questionnaire)
 
 ## Context

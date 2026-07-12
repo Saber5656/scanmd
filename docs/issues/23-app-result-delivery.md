@@ -20,10 +20,13 @@ DESIGN §9.5 defines delivery; Issue 04 provides `remediationURL`; Issue 11 prov
 
 ## Detailed Requirements
 
-1. Authorization: request `UNUserNotificationCenter` authorization (`.alert`) lazily —
-   on first delivery, not at launch (DESIGN §10.3 spirit). Denied → fall back to a brief
-   `NSAlert`-free path: menu bar icon flashes success (SF Symbol swap for 1.5 s) and
-   errors fall back to `NSAlert` (errors must never be silent).
+1. Authorization: if `app.showNotification` is true, request `UNUserNotificationCenter`
+   authorization (`.alert`) lazily — on first delivery, not at launch (DESIGN §10.3
+   spirit). Denied → fall back to a brief `NSAlert`-free path: menu bar icon flashes
+   success (SF Symbol swap for 1.5 s) and errors fall back to `NSAlert` (errors must never
+   be silent). If `app.showNotification` is false, do not request authorization and do not
+   post success/empty notifications; clipboard writes and auto-save still run, and errors
+   still surface via the non-notification fallback.
 2. Success: clipboard write (always, via `ClipboardSink`) → notification title
    `Copied as Markdown`, body = first 120 chars of the markdown (sanitized to a single
    line, ellipsis) — note: notification content is user-visible by design; do NOT log it
@@ -34,9 +37,12 @@ DESIGN §9.5 defines delivery; Issue 04 provides `remediationURL`; Issue 11 prov
    the URL (`UNNotificationAction`; handle in the delegate; app is `LSUIElement` so set
    the delegate on launch).
 5. Auto-save (`app.autoSave && output.directory != nil`): run `FileSink` in directory
-   mode after the clipboard write; success appends ` · saved as <basename>` to the
-   notification body; failure sends a **separate** error notification (clipboard content
-   is intact — say so in the body: `Result is still on the clipboard`).
+   mode after the clipboard write; when notifications are enabled, success appends
+   ` · saved as <basename>` to the notification body; failure sends a **separate** error
+   notification (clipboard content is intact — say so in the body:
+   `Result is still on the clipboard`). When notifications are disabled, autosave success
+   is silent and autosave failure uses the same non-notification error fallback as other
+   errors.
 6. Notification identifiers: one mutable delivery notification per capture
    (`scanmd.capture.<uuid>`); remove delivered ones older than the last 5 (no center
    spam).

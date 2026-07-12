@@ -1,7 +1,7 @@
 # ADR-004: Region capture shells out to `/usr/sbin/screencapture -i` in v1
 
 - Status: Accepted
-- Date: 2026-07-07
+- Date: 2026-07-12
 - Decider: Fable (design), conservative default — reversible behind `ScanSource`
 
 ## Context

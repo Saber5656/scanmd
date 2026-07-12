@@ -28,10 +28,15 @@ hence template + runbook here, execution by the maintainer.
      `sha256 "{{SHA256}}"`;
    - `depends_on xcode: ["<min version from Issue 01>", :build]`,
      `depends_on macos: :sonoma`;
-   - `def install`: `system "swift", "build", "-c", "release",
-     "--disable-sandbox"` … install `.build/release/scanmd` to `bin` — verify the
-     `-sectcreate` Info.plist linker flags survive the Homebrew build (camera usage
-     string check: `strings` test from Issue 16 repeated in `test do`);
+   - declare Homebrew `resource` blocks for every non-stdlib SwiftPM dependency pinned in
+     `Package.resolved` (initially `swift-argument-parser`) and stage them into a local
+     SwiftPM cache before build; the formula must not fetch undeclared packages during
+     `def install`.
+   - `def install`: `system "swift", "build", "-c", "release", "--disable-sandbox",
+     "--package-path", buildpath` using the staged dependency cache … install
+     `.build/release/scanmd` to `bin` — verify the `-sectcreate` Info.plist linker flags
+     survive the Homebrew build (camera usage string check: `strings` test from Issue 16
+     repeated in `test do`);
    - `test do`: `assert_match version.to_s, shell_output("#{bin}/scanmd --version")`
      plus the strings check above.
 2. `Scripts/update-homebrew-formula.sh <version>`: downloads the tag tarball, computes
@@ -43,10 +48,12 @@ hence template + runbook here, execution by the maintainer.
      `gh repo create` command listed but **executed by the maintainer**;
    - per release (after Issue 26's publish step): run the update script, commit the
      formula to the tap, `brew install --build-from-source saber5656/tap/scanmd`
+     in a clean cache environment to prove all SwiftPM resources are declared,
      smoke test, `brew test scanmd`, `brew audit --strict scanmd` — all outputs pasted
      into the release checklist;
    - troubleshooting: Xcode CLT vs full Xcode note, `--disable-sandbox` rationale
-     (SwiftPM fetching within brew sandbox).
+     (SwiftPM build behavior under the brew sandbox; dependency downloads must come from
+     declared `resource` blocks).
 4. Formula install must not require the app (CLI-only distribution; app ships via
    GitHub Releases zip — stated in the runbook and README wording for Issue 28).
 

@@ -40,8 +40,9 @@ bilingual).
      ADR-006 path rules and template variables table;
    - Exit codes table (§8.4 verbatim);
    - Permissions summary linking to `docs/PERMISSIONS.md`;
-   - Limitations (v1 honest list: no tables, single-column reading order, no sandbox,
-     macOS 14+ only) and Roadmap-ish pointer to `docs/ISSUE_PLAN.md` §7;
+   - Limitations (v1 honest list: table structure is emitted as plain text, single-column
+     reading order, no sandbox, macOS 14+ only) and Roadmap-ish pointer to
+     `docs/ISSUE_PLAN.md` §7;
    - Contributing/License footer.
 2. `README.ja.md`: full Japanese translation (not a summary); `README.md` links to it
    at the top (`日本語版はこちら`).
@@ -77,7 +78,7 @@ Rendered-README review, CI link (drift + lint), fresh-environment walkthrough no
 
 ## Dependencies
 
-Issues 18, 23, 26. Soft: 27 (brew command syntax final).
+Issues 18, 23, 25, 26. Soft: 27 (brew command syntax final).
 
 ## Non-goals
 

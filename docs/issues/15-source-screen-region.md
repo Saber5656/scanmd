@@ -73,7 +73,8 @@ evidence in the PR.
 
 ## Dependencies
 
-Issues 04, 05, 06 (12's `ImageDecoder` for decoding — hard dependency at merge time).
+Issues 04, 05, 06, 12. Issue 12's `ImageDecoder` is required for decoding the captured
+PNG and is a hard merge-time dependency.
 
 ## Non-goals
 

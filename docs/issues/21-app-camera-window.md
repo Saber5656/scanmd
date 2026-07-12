@@ -65,8 +65,8 @@ Manual checklist + `swift test` + app screen recording or step log in PR.
 
 ## Dependencies
 
-Issues 16, 19 (20's coordinator wiring pattern is assumed merged in practice —
-`.camera` follows the same request path).
+Issues 16, 19, 20. Issue 20's real `CaptureCoordinator` is a hard dependency because
+`.camera` follows the same busy-rejection, pipeline, and delivery path.
 
 ## Non-goals
 

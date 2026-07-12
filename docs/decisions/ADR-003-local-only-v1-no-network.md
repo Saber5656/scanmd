@@ -1,7 +1,7 @@
 # ADR-003: v1 is strictly local-only; LLM formatting is a v2 opt-in behind a fixed seam
 
 - Status: Accepted
-- Date: 2026-07-07
+- Date: 2026-07-12
 - Decider: repository owner (explicit answer to design questionnaire)
 
 ## Context

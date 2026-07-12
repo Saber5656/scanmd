@@ -38,14 +38,17 @@ consume this corpus, so it lands before them.
 3. PDFs: `text-layer.pdf` (2 pages, generated from attributed strings — stable text
    layer; committed alongside `text-layer.expected.md` golden for the full CLI path),
    `scanned.pdf` (2 pages: embedded page-size images of rendered text, no text layer),
-   `mixed.pdf` (page 1 text layer, page 2 scanned), `encrypted.pdf` (any password).
+   `mixed.pdf` (page 1 text layer, page 2 scanned), `encrypted.pdf` encrypted with
+   password `scanmd-fixture` but never unlocked by v1 tests; expected behavior is the
+   `.unsupportedInput("encrypted PDF")` path.
 4. Malformed/abuse corpus (files, each a few KB): `truncated.png`, `not-an-image.png`
    (text bytes, .png name), `zero-byte.pdf`, `deep-bomb.pdf` (valid header, garbage body),
    `huge-dimensions.png` (valid header declaring > `maxImagePixels`; tiny file).
 5. `TokenRecall.assertRecall(image:expectedTokensFile:threshold:)` — runs a provided
    recognizer (parameterized; Issue 08 plugs the real one) and asserts
-   `|recognized ∩ expected| / |expected| ≥ threshold` after NFKC casefold normalization.
-   Failure message lists missing tokens.
+   multiset recall after NFKC casefold normalization:
+   `sum(min(countRecognized[token], countExpected[token])) / totalExpectedTokenCount ≥ threshold`.
+   Duplicate expected tokens count separately. Failure message lists missing tokens with counts.
 6. `Golden.assert(_ actual: String, file: "name.golden.md")` — compares against
    `Tests/Fixtures/golden/`, with `SCANMD_UPDATE_GOLDEN=1` env to regenerate; diff shown
    on failure.

@@ -26,10 +26,15 @@ every stage is injected, none implemented here.
    `SourceKind`, `SourceMetadata`, `NormalizedRect { x,y,width,height: Double }`,
    `RecognizedLine`, `Block`, `PageResult`, `ScanDocument`, plus
    `ScanStats { lineCount: Int, meanConfidence: Double, stageMillis: [String: Int] }`.
+   `PageResult`, `ScanStats`, and `ScanDocument` are `Codable` as well as `Sendable`;
+   the complete `ScanDocument` graph is the `--format json` envelope contract.
+   Also implement `SourceAcquisition { metadata: SourceMetadata, pages: [PagePayload] }`;
+   the pipeline must use this metadata instead of downcasting concrete sources.
 2. `Block` Codable encoding: tagged single-key object form —
    `{"heading":{"level":1,"text":"…"}}`, `{"paragraph":{"text":"…"}}`,
    `{"listItem":{"ordered":false,"indent":0,"text":"…"}}`, `{"pageBreak":{}}` — with a
-   round-trip test (this becomes the `--format json` contract, Issue 18).
+   round-trip test, plus a full `ScanDocument` JSON round-trip covering source metadata,
+   pages, blocks, and stats (this becomes the `--format json` contract, Issue 18).
 3. Geometry: `NormalizedRect.fromVision(_ rect: CGRect) -> NormalizedRect` implementing
    the bottom-left → top-left flip of DESIGN §5.1, with tests
    (`(x:0.1,y:0.2,w:0.3,h:0.1)` → `y' = 0.7`).
@@ -42,7 +47,8 @@ every stage is injected, none implemented here.
    toolVersion: String }` — all `Sendable`, all with defaults mirroring DESIGN §8.7.
 5. `Pipeline` (struct, injected stages):
    `run(source: any ScanSource, …) async throws -> (ScanDocument, markdown: String)`:
-   - `acquire()` → for `.image` payloads run recognizer then layout; for `.text` payloads
+   - `acquire()` → build `ScanDocument.source` from `SourceAcquisition.metadata`; for
+     `.image` and `.lazyImage` payloads run recognizer then layout; for `.text` payloads
      produce paragraph blocks by splitting on blank lines (DESIGN §7.4) with empty `lines`.
    - Concurrency: recognize pages via `withThrowingTaskGroup`, at most
      `min(4, ProcessInfo.processInfo.activeProcessorCount)` in flight; results reassembled

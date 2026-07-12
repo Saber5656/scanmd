@@ -29,13 +29,15 @@ Both surfaces share them (CLI flags §8.2; app auto-save §9.5).
    Never reads the pasteboard (B5).
 3. `FileSink(target: FileTarget)` where
    `enum FileTarget { case explicitFile(String), directory(String, template: String) }`:
-   - Path normalization: expand `~`, resolve to absolute, standardize `..` components
-     **before** any filesystem operation.
+   - Path normalization: expand `~`, resolve to absolute, standardize `..` components, and
+     resolve existing symlinks in the final parent directory **before** any filesystem
+     operation. The containment check compares symlink-resolved parent paths.
    - `explicitFile`: parent directory must exist (`.deliveryFailed` if not — do NOT
      mkdir for explicit paths); write the file.
-   - `directory`: create the directory (and intermediates) 0700 if missing; render
+   - `directory`: create the directory (and intermediates) 0700 if missing, and reject a
+     pre-existing target directory whose permissions are broader than 0700; render
      filename via `FilenameTemplate` (Issue 06) with `slugSource` = first heading text
-     else first paragraph's first 24 chars; **containment check**: the final resolved
+     else first paragraph's first 24 chars else `untitled`; **containment check**: the final resolved
      path's parent must equal the resolved target directory (defense-in-depth on top of
      template sanitization; violation → `.deliveryFailed("path escapes target
      directory")`).

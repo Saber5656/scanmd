@@ -34,17 +34,17 @@ and §7.4, text-layer pages skip OCR entirely — the pipeline (Issue 05) alread
    - `page.string`, trimmed; if `!forceOCR && trimmed.count >= pdf.textLayerMinChars`
      → `PagePayload.text(pageString)` (untrimmed original except normalized to NFC and
      CRLF→LF).
-   - else rasterize → `PagePayload.image`:
+   - else prepare lazy rasterization → `PagePayload.lazyImage`:
      target pixel size = page media box size (points) × `pdf.rasterDPI / 72`, capped so
      `width×height ≤ limits.maxImagePixels` (reduce DPI proportionally if needed, floor
      150 DPI; below floor → `.limitExceeded`). Draw via CGContext bitmap
      (`page.draw(with: .mediaBox, to: context)`) with white background fill first,
      y-flip handled, `interpolationQuality = .high`.
-5. Memory discipline: pages rasterized lazily — `acquire()` may return payload
-   descriptors that rasterize on demand ONLY if `PagePayload` stays as designed;
-   otherwise rasterize sequentially inside `acquire()` and keep peak = one page bitmap
-   (+ document). Choose the simpler sequential approach; assert peak behavior in a test
-   with a 50-page scanned fixture generated on the fly in temp (not committed).
+5. Memory discipline: scanned pages are represented as `PagePayload.lazyImage` closures
+   in the returned `SourceAcquisition`, not pre-rendered `CGImage` values. The pipeline
+   invokes one lazy image at a time and releases it after recognition, so peak memory is
+   one page bitmap (+ document and text payload descriptors). Assert peak behavior with
+   a 50-page scanned fixture generated on the fly in temp (not committed).
 6. Metadata: `pageCount` = selected count; `originPath` absolute.
 7. Tests: `text-layer.pdf` → 2 text payloads, exact strings · `scanned.pdf` → 2 image
    payloads with DPI-derived pixel sizes · `mixed.pdf` → [text, image] ·

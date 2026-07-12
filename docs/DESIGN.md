@@ -1,7 +1,7 @@
 # scanmd — v1 Design
 
-Status: Draft for v1 implementation
-Last updated: 2026-07-07
+Status: Accepted for v1 implementation
+Last updated: 2026-07-12
 Owner: Saber5656
 Source of truth: this file and the other documents under `docs/` in this repository.
 
@@ -119,8 +119,8 @@ Every capture, on either surface, runs the same five stages:
 │ Source │ → │ Recognizer │ → │ Layout       │ → │ Markdown      │ → │ Sinks  │
 │        │   │ (Vision)   │   │ Reconstructor│   │ Renderer      │   │        │
 └────────┘   └────────────┘   └──────────────┘   └───────────────┘   └────────┘
- acquire()     recognize()      blocks(from:)      render(_:)        deliver(_:)
- → [Page]      → [RecognizedLine]  → [Block]       → String          (stdout/clipboard/file)
+ acquire()       recognize()        blocks(from:)     render(_:)      deliver(_:)
+ → SourceAcquisition → [RecognizedLine] → [Block]      → String        (stdout/clipboard/file)
 ```
 
 - A `Source` yields one or more **pages**. A page is either an image (needs OCR) or
@@ -204,7 +204,8 @@ public struct ScanDocument: Sendable {
 
 ```swift
 public enum PagePayload: Sendable {
-  case image(CGImage)                 // needs OCR
+  case image(CGImage)                 // needs OCR; single-page eager payload
+  case lazyImage(@Sendable () async throws -> CGImage) // rasterizes on demand
   case text(String)                   // PDF text layer; skips OCR + layout
 }
 ```
@@ -212,9 +213,14 @@ public enum PagePayload: Sendable {
 ### 5.4 Stage protocols
 
 ```swift
+public struct SourceAcquisition: Sendable {
+  public var metadata: SourceMetadata
+  public var pages: [PagePayload]      // >=1 page or source throws
+}
+
 public protocol ScanSource: Sendable {
   var kind: SourceKind { get }
-  func acquire() async throws -> [PagePayload]     // ≥1 page or throws
+  func acquire() async throws -> SourceAcquisition
 }
 
 public protocol TextRecognizer: Sendable {
@@ -320,8 +326,8 @@ Every source validates input against `Limits` (§10.4) **before** heavy work, an
 - Page selection: `--pages` accepts `N`, `N-M`, `N-`, comma lists (1-based, inclusive);
   invalid ranges → `.usage`.
 - Per page: if `page.string` (trimmed) length ≥ `pdf.textLayerMinChars` (default 8) → emit
-  `PagePayload.text`; else rasterize at `pdf.rasterDPI` (default 300, max 600) to CGImage →
-  `PagePayload.image` (OCR fallback). `--force-ocr` rasterizes every page.
+  `PagePayload.text`; else emit `PagePayload.lazyImage` that rasterizes at `pdf.rasterDPI`
+  (default 300, max 600) on demand for OCR fallback. `--force-ocr` lazily rasterizes every page.
 - Limits: page count after selection ≤ `pdf.maxPages` (default 500) else `.limitExceeded`.
 - Text-layer pages bypass Layout (§4.1): the renderer splits text into paragraphs on blank
   lines, maps nothing else (no heading/list heuristics on extracted text in v1).
@@ -336,6 +342,9 @@ Every source validates input against `Limits` (§10.4) **before** heavy work, an
   `requestAccess` (async); denied → `.permissionDenied(.camera)`.
 - CLI flow: `--list-devices` prints an indexed table and exits 0. Otherwise select device by
   `--device <index|name-substring>` or config `camera.device`, else first device.
+  Indexes are resolved against the printed list. Name values first try exact case-insensitive
+  match; if none, substring match must produce exactly one device or fail with `.usage`
+  listing the matching names.
   Warm up `camera.warmupMs` (default 800 ms) for exposure, print `3…2…1` countdown to stderr
   (suppressed by `--no-countdown`), capture one photo via `AVCapturePhotoOutput`, max wait
   `limits.captureTimeoutSec`.

@@ -40,9 +40,10 @@ output rules).
 4. Hard caps (DESIGN §10.4): after defaults+file merge, each `limits.*` and `pdf.maxPages`
    `pdf.rasterDPI` value may not exceed 4× its default → `.usage` naming the key.
    `rasterDPI` additionally clamps to ≤ 600.
-5. `ConfigLoader.save(_:to:)`: create parent dir 0700 if needed, write to
-   `config.json.tmp-<uuid>` then `rename(2)`; final file chmod 0600; pretty-printed,
-   `sortedKeys` for stable diffs.
+5. `ConfigLoader.save(_:to:)`: create parent dir 0700 if needed, write the temporary file
+   in the same directory as the target (`<target-basename>.tmp-<uuid>`) then `rename(2)`;
+   final file chmod 0600; pretty-printed, `sortedKeys` for stable diffs. The same-directory
+   temp path is required for atomic rename semantics across filesystems.
 6. `defaultConfigJSON()` — canonical full-default document used by `config init`
    (Issue 17 wires the subcommand): byte-stable output, includes `"version": 1`.
 7. `FilenameTemplate.render(template:date:sourceKind:slugSource:) -> String`

@@ -1,6 +1,6 @@
 # macOS capture & OCR API landscape (v1 feasibility notes)
 
-- Date: 2026-07-07
+- Date: 2026-07-12
 - Purpose: record the API facts and risks the v1 design depends on, with verification
   status. Implementation issues cite this file instead of re-deriving platform folklore.
 - Legend: ✅ = well-established, safe to build on. ⚠️ = believed true, verify during the

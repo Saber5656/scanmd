@@ -1,7 +1,7 @@
 # ADR-006: One JSON config file at `~/.config/scanmd/config.json`, shared by CLI and app
 
 - Status: Accepted
-- Date: 2026-07-07
+- Date: 2026-07-12
 - Decider: Fable (design), conservative default
 
 ## Context
@@ -18,7 +18,8 @@ opaque to CLI users).
   `JSONDecoder` — zero added dependencies, exact schema in DESIGN §8.7.
 - Location: `--config` flag → `$SCANMD_CONFIG` → `$XDG_CONFIG_HOME/scanmd/config.json` →
   `~/.config/scanmd/config.json`. The app reads/writes the same file (atomic
-  temp-file+rename, 0600; parent dir 0700) and watches it for external changes.
+  same-directory temp-file+rename, 0600; parent dir 0700) and watches the containing
+  directory for external changes so temp+rename replacement does not detach the watcher.
 - Unknown keys warn (forward compatibility); type errors fail with a JSON-path message.
 - Exception: the global hotkey binding is stored by the `KeyboardShortcuts` library in its
   own `UserDefaults` store (its native mechanism); the config file's `app.hotkey` is

@@ -1,7 +1,7 @@
 # ADR-005: App target via XcodeGen; Developer ID + hardened runtime, no sandbox in v1
 
 - Status: Accepted
-- Date: 2026-07-07
+- Date: 2026-07-12
 - Decider: Fable (design), conservative default
 
 ## Context

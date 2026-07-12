@@ -22,10 +22,13 @@ DESIGN §12: CI stays keyless; signing credentials never leave the maintainer's 
 ## Detailed Requirements
 
 1. Version stamping: single source `Sources/ScanMDKit/Version.swift`
-   (`public enum ScanMDVersion { public static let current = "X.Y.Z" }`) consumed by
+   (`public enum ScanMDVersion { public static let current = "X.Y.Z" }`, with optional
+   prerelease suffix such as `"0.9.0-rc.1"` for rehearsal releases) consumed by
    CLI `--version`, front matter `tool:`, and app `MARKETING_VERSION` (xcodegen reads it
    via a small generation step or the release checklist keeps them in sync — pick one,
-   document it, and enforce with a CI check comparing the three).
+   document it, and enforce with a CI check comparing the three). Tag validation strips
+   the leading `v` and accepts either `X.Y.Z` or `X.Y.Z-<prerelease>`; prerelease tags are
+   allowed only for draft/rehearsal releases and must not satisfy the final `v1.0.0` gate.
 2. `release.yml`: trigger `push: tags: ['v*']`; permissions
    `{ contents: write }` (release upload only); jobs:
    - build CLI: `swift build -c release --arch arm64 --arch x86_64` →
@@ -39,9 +42,14 @@ DESIGN §12: CI stays keyless; signing credentials never leave the maintainer's 
 3. `Scripts/release-sign.sh` (maintainer-local, requires Developer ID cert + notarytool
    keychain profile; **script must never echo secrets and takes no credentials as
    args** — it uses the local keychain/profile by name):
-   codesign CLI binary (hardened runtime, timestamp) → codesign app (entitlements from
-   Issue 19) → `ditto` zip → `xcrun notarytool submit --wait` both → staple app →
-   rebuild `SHA256SUMS` → print upload commands (`gh release upload vX.Y.Z … --clobber`).
+   unpack `scanmd-<ver>-macos-universal.tar.gz` → codesign CLI binary (hardened runtime,
+   timestamp) → package the signed CLI into a temporary notarization zip
+   `scanmd-<ver>-macos-universal-notary.zip` with `ditto -c -k --keepParent` → codesign app
+   (entitlements from Issue 19) → `ditto` zip the app → `xcrun notarytool submit --wait`
+   the CLI notary zip and app zip → staple app → rebuild the distributable CLI tarball
+   `scanmd-<ver>-macos-universal.tar.gz` from the signed binary → rebuild `SHA256SUMS` →
+   print upload commands (`gh release upload vX.Y.Z … --clobber`). The notary zip is an
+   intermediate submission container and is not uploaded as the public CLI artifact.
 4. `Scripts/verify-release.sh <version>`: downloads the published artifacts, verifies
    checksums, `codesign --verify --deep --strict`, `spctl --assess` (app), runs
    `./scanmd --version`, prints a table. Used by the runbook's final step.

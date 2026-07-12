@@ -1,7 +1,7 @@
 # ADR-001: v1 ships both a CLI and a menu bar app on one shared core
 
 - Status: Accepted
-- Date: 2026-07-07
+- Date: 2026-07-12
 - Decider: repository owner (explicit answer to design questionnaire)
 
 ## Context

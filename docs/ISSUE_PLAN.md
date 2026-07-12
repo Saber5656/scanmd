@@ -1,7 +1,7 @@
 # scanmd v1 Issue Plan
 
 Status: Active
-Last updated: 2026-07-07
+Last updated: 2026-07-12
 Derived from: `docs/DESIGN.md` (normative). GitHub Issues are generated from
 `docs/issues/NN-*.md`; if they diverge, these files win. GitHub numbering is
 offset by one from the file numbering (PR #1 took the first number): draft
@@ -84,20 +84,20 @@ behavior lives only in prose outside this plan.
 | 12 | 05, 06 | 07 (fixtures used in tests) |
 | 13 | 05, 12 | — |
 | 14 | 05, 06, 07 | — |
-| 15 | 04, 05, 06 | — |
+| 15 | 04, 05, 06, 12 | — |
 | 16 | 04, 05, 06 | KU-2 validation gates approach |
 | 17 | 04, 05, 06, 08, 09, 10, 11, 12 | — |
 | 18 | 13, 14, 15, 16, 17 | — |
 | 19 | 05 | 03 (CI job added here) |
 | 20 | 12, 13, 14, 15, 19 | — |
-| 21 | 16, 19 | — |
+| 21 | 16, 19, 20 | — |
 | 22 | 06, 19 | — |
 | 23 | 11, 20 | — |
 | 24 | 03 | — |
 | 25 | — | 20 (verify claims against real code before closing) |
 | 26 | 03, 17, 19 | 02 (license in artifacts) |
 | 27 | 26 | — |
-| 28 | 18, 23, 26 | 27 |
+| 28 | 18, 23, 25, 26 | 27 |
 
 ## 4. Implementation waves
 

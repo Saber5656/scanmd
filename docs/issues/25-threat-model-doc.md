@@ -26,8 +26,9 @@ verification pass, not aspirational prose.
    - Assets: captured content (primary), user file system, clipboard, TCC grants,
      config file, release artifacts.
    - Trust boundary table: for each of B1–B7 (DESIGN §10.1): threat scenarios
-     (STRIDE-tagged), implemented controls **with code references**
-     (`file.swift:symbol`), residual risk, test reference.
+     (STRIDE-tagged), implemented controls **with references** (`path:line` for code,
+     workflow, script, and markdown controls, or `path#anchor` for stable docs sections),
+     residual risk, test reference.
    - Abuse cases (DESIGN §10.7) with positions.
    - Privacy rules p1–p4 with their enforcement points (Log wrapper signatures, temp
      file lifecycle, no-network CI guard).

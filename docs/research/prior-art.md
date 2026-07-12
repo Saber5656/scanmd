@@ -1,6 +1,6 @@
 # Prior art: on-device screen/image OCR tools on macOS
 
-- Date: 2026-07-07
+- Date: 2026-07-12
 - Purpose: position scanmd, confirm the gap it fills, and steal proven UX decisions.
 - Method: author knowledge as of early 2026. Feature claims below are directional, not
   audited from current releases; anything marked (verify) should be re-checked if it starts

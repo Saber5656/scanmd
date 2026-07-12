@@ -33,12 +33,18 @@ requires pinned actions and minimal token permissions from the first workflow on
    - `Scripts/format.sh`,
    - `Scripts/check-no-network.sh`.
 4. `Scripts/check-no-network.sh` (bash, `set -euo pipefail`): greps product sources
-   (`Sources/`, later also `App/ScanMD/`) for forbidden symbols and fails if any match:
-   `URLSession`, `import Network`, `NWConnection`, `CFNetwork`, `NSURLConnection`,
-   `curl `, `Process(.*curl`. Allow an explicit annotated escape hatch ONLY via
-   `// scanmd:allow-network-symbol <reason>` on the same line, which the script counts and
-   reports (target count for v1: 0; a nonzero count still fails unless the line also
-   appears in `Scripts/no-network-allowlist.txt`). Test sources are exempt.
+   (`Sources/`, later also `App/ScanMD/`) with an extended denylist and fails if any match:
+   imports/frameworks (`import Network`, `CFNetwork`, `Network.framework`), request/session
+   APIs (`URLSession`, `URLRequest`, `NSURLConnection`, `NWConnection`, `NWListener`,
+   `NWEthernetChannel`, `WebSocket`, `AsyncHTTPClient`), network URL reads
+   (`Data\\s*\\(\\s*contentsOf:\\s*URL\\s*\\(`, `String\\s*\\(\\s*contentsOf:\\s*URL\\s*\\(`),
+   stream/socket APIs (`InputStream\\s*\\(\\s*url:`, `OutputStream\\s*\\(\\s*url:`,
+   `getaddrinfo`, `connect\\s*\\(`), and shell-outs (`curl `, `wget `,
+   `Process\\(.*(curl|wget)`). The guard also fails on `http://` or `https://` string
+   literals in product sources unless explicitly allowlisted. Allow an annotated escape
+   hatch ONLY via `// scanmd:allow-network-symbol <reason>` on the same line, which the
+   script counts and reports (target count for v1: 0; a nonzero count still fails unless
+   the line also appears in `Scripts/no-network-allowlist.txt`). Test sources are exempt.
 5. Fail-fast quality: workflow must complete < 15 min; cache SwiftPM
    (`~/.swiftpm`, `.build`) keyed on `Package.resolved` hash with a pinned cache action.
 6. Add a status badge to README (one line; full README rewrite stays in Issue 28).
