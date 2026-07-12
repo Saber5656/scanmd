@@ -45,6 +45,9 @@ requires pinned actions and minimal token permissions from the first workflow on
    hatch ONLY via `// scanmd:allow-network-symbol <reason>` on the same line, which the
    script counts and reports (target count for v1: 0; a nonzero count still fails unless
    the line also appears in `Scripts/no-network-allowlist.txt`). Test sources are exempt.
+   Known limitation: this is a denylist guard, not an exhaustive proof of no network I/O;
+   CodeQL (Issue 24) and manual security review are the backstop for aliasing, obfuscated
+   strings, and wrapper-library bypasses.
 5. Fail-fast quality: workflow must complete < 15 min; cache SwiftPM
    (`~/.swiftpm`, `.build`) keyed on `Package.resolved` hash with a pinned cache action.
 6. Add a status badge to README (one line; full README rewrite stays in Issue 28).
